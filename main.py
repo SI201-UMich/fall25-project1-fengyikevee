@@ -13,17 +13,20 @@ def load_csv(penguins_file):
                 
                 for key, value in row.items():
                     if key in ['bill_length_mm', 'bill_depth_mm', 'flipper_length_mm', 'body_mass_g']:
-                        if value and value.strip():
+                        if value and value.strip() and value.strip().upper() != 'NA':
                             penguin[key] = float(value)
                         else: 
                             penguin[key] = None
                     elif key == 'year':
-                        if value and value.strip():
+                        if value and value.strip() and value.strip().upper() != 'NA':
                             penguin[key] = int(value)
                         else: 
                             penguin[key] = None
                     else:
-                        penguin[key] = value if value else ""
+                        if value and value.strip().upper() != 'NA':
+                            penguin[key] = value
+                        else:
+                            penguin[key] = ""
                 
                 penguins.append(penguin)  # This line MUST be at same indent as penguin = {}
     except FileNotFoundError:
@@ -118,7 +121,7 @@ def write_to_file(gender_stats, weight_stats, ratios, filename='penguin_analysis
         file.write('-'*30+'\n')
         for island, counts in sorted(gender_stats.items()):
             file.write(f"Island: {island}\n")
-            file.write(f' Males: {counts.get('male',0)}\n')
+            file.write(f"  Males: {counts.get('male',0)}\n")
             file.write(f"  Females: {counts.get('female', 0)}\n")
             file.write(f"  Male:Female Ratio: {ratios.get(island, 'N/A')}\n")
 
