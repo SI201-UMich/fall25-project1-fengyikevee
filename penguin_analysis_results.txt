@@ -1,0 +1,46 @@
+============================================================
+Penguin Analysis Results
+============================================================
+
+Gender distribution by island:
+------------------------------
+Island: Biscoe
+  Males: 83
+  Females: 80
+  Male:Female Ratio: 1.04
+Island: Dream
+  Males: 62
+  Females: 61
+  Male:Female Ratio: 1.02
+Island: Torgersen
+  Males: 23
+  Females: 24
+  Male:Female Ratio: 0.96
+
+============================================================
+AVERAGE BODY WEIGHT (g) BY SPECIES, ISLAND, AND GENDER
+------------------------------
+
+Adelie:
+  Biscoe:
+    Male: 4050.0 g
+    Female: 3369.32 g
+  Dream:
+    Male: 4045.54 g
+    Female: 3344.44 g
+  Torgersen:
+    Male: 4034.78 g
+    Female: 3395.83 g
+
+Chinstrap:
+  Dream:
+    Male: 3938.97 g
+    Female: 3527.21 g
+
+Gentoo:
+  Biscoe:
+    Male: 5484.84 g
+    Female: 4679.74 g
+
+============================================================
+Analysis complete.

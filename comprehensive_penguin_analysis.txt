@@ -1,0 +1,81 @@
+======================================================================
+COMPREHENSIVE PENGUIN DATA ANALYSIS
+======================================================================
+
+DATASET OVERVIEW
+----------------------------------------
+Total number of penguins: 344
+Number of species: 3
+Number of islands: 3
+
+======================================================================
+SPECIES DISTRIBUTION BY ISLAND
+----------------------------------------
+
+Species 1: Adelie
+  Total count: 152
+  Island distribution:
+    - Biscoe: 44 (28.9%)
+    - Dream: 56 (36.8%)
+    - Torgersen: 52 (34.2%)
+
+Species 2: Chinstrap
+  Total count: 68
+  Island distribution:
+    - Dream: 68 (100.0%)
+
+Species 3: Gentoo
+  Total count: 124
+  Island distribution:
+    - Biscoe: 124 (100.0%)
+
+======================================================================
+GENDER DISTRIBUTION BY ISLAND
+----------------------------------------
+
+Island: Biscoe
+  Males: 83
+  Females: 80
+  Total: 163
+  Male:Female Ratio: 1.04
+
+Island: Dream
+  Males: 62
+  Females: 61
+  Total: 123
+  Male:Female Ratio: 1.02
+
+Island: Torgersen
+  Males: 23
+  Females: 24
+  Total: 47
+  Male:Female Ratio: 0.96
+
+======================================================================
+AVERAGE BODY WEIGHT (g) BY SPECIES, ISLAND, AND GENDER
+----------------------------------------
+
+Adelie:
+  Biscoe:
+    Male: 4050.0 g
+    Female: 3369.32 g
+  Dream:
+    Male: 4045.54 g
+    Female: 3344.44 g
+  Torgersen:
+    Male: 4034.78 g
+    Female: 3395.83 g
+
+Chinstrap:
+  Dream:
+    Male: 3938.97 g
+    Female: 3527.21 g
+
+Gentoo:
+  Biscoe:
+    Male: 5484.84 g
+    Female: 4679.74 g
+
+======================================================================
+Analysis complete. Data processed successfully!
+======================================================================
