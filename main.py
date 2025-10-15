@@ -2,9 +2,9 @@
 # Team Members: Eve Feng, Alexia Zaidi
 # 
 # Function Attribution:
-# - Eve: load_csv, count_island_gender, calculate_ratio, calculate_body_weights
+# - Eve: load_csv, count_island_gender, calculate_ratio, calculate_body_weights, also integrating the codes from eve and alexia (both main.py and test.py)
 # - Alexia: count_total_penguins, count_species_by_island
-# - Both: write_comprehensive_results, test cases for our own part of functions
+# - Both: load_csv (the final version integrates our code) write_comprehensive_results, test cases for our own part of functions
 #
 # AI Tools Used: 
 # Eve: used claude to ask it help load_csv function and write_comprehensive_results function; also use it to come up with edge cases for test cases.
