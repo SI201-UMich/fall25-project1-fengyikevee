@@ -1,6 +1,31 @@
 import tempfile
-from main import load_csv, count_island_gender, calculate_ratio, calculate_body_weights, write_to_file
+from main import (load_csv, count_island_gender, calculate_ratio, 
+                  calculate_body_weights, write_to_file,
+                  count_total_penguins, count_species_by_island,
+                  write_comprehensive_results)
 
+
+# helper function to parse CSV strinig to dict
+def parse_csv_string_to_dict(csv_string):
+
+    parts = csv_string.split(',')
+    # Clean up quotes and whitespace
+    parts = [p.strip().strip('"') for p in parts]
+    
+    penguin = {
+        'species': parts[1] if len(parts) > 1 else '',
+        'island': parts[2] if len(parts) > 2 else '',
+        'bill_length_mm': float(parts[3]) if len(parts) > 3 and parts[3] else None,
+        'bill_depth_mm': float(parts[4]) if len(parts) > 4 and parts[4] else None,
+        'flipper_length_mm': float(parts[5]) if len(parts) > 5 and parts[5] else None,
+        'body_mass_g': float(parts[6]) if len(parts) > 6 and parts[6] else None,
+        'sex': parts[7] if len(parts) > 7 else '',
+        'year': int(parts[8]) if len(parts) > 8 and parts[8] else None
+    }
+    return penguin
+
+
+# eve tests
 
 def test_load_csv():
     
@@ -214,17 +239,130 @@ def test_calculate_body_weights():
     print("✓ Test 4 passed: Missing values handled")
 
 
+# alexia's tests
+
+def test_count_total_penguins():
+    """Test the count_total_penguins function - Using teammate's test cases."""
+    print("\nTesting count_total_penguins...")
+    
+    # Test 1: Single penguin (from teammate's test)
+    test_data = [parse_csv_string_to_dict('"1","Adelie","Torgersen",39.1,18.7,181,3750,"male",2007')]
+    result = count_total_penguins(test_data)
+    assert result == 1, f"Should count 1 penguin, got {result}"
+    print("✓ Test 1 passed: Single penguin counted")
+    
+    # Test 2: Empty list (from teammate's test)
+    test_data2 = []
+    result2 = count_total_penguins(test_data2)
+    assert result2 == 0, "Empty list should return 0"
+    print("✓ Test 2 passed: Empty list handled")
+    
+    # Test 3: Two penguins (from teammate's test)
+    test_data3 = [
+        parse_csv_string_to_dict('"1","Adelie","Torgersen",39.1,18.7,181,3750,"male",2007'),
+        parse_csv_string_to_dict('"2","Adelie","Torgersen",39.5,17.4,186,3800,"female",2007')
+    ]
+    result3 = count_total_penguins(test_data3)
+    assert result3 == 2, "Should count 2 penguins"
+    print("✓ Test 3 passed: Two penguins counted")
+    
+    # Test 4: Three penguins (from teammate's test)
+    test_data4 = [
+        parse_csv_string_to_dict('"1","Adelie","Torgersen",39.1,18.7,181,3750,"male",2007'),
+        parse_csv_string_to_dict('"2","Adelie","Torgersen",39.5,17.4,186,3800,"female",2007'),
+        parse_csv_string_to_dict('"3","Adelie","Torgersen",40.3,18,195,3250,"female",2007')
+    ]
+    result4 = count_total_penguins(test_data4)
+    assert result4 == 3, "Should count 3 penguins"
+    print("✓ Test 4 passed: Three penguins counted")
+
+
+def test_count_species_by_island():
+    """Test the count_species_by_island function - Using teammate's test cases."""
+    print("\nTesting count_species_by_island...")
+    
+    # Test 1: Multiple species and islands (from teammate's test)
+    test_data = [
+        parse_csv_string_to_dict('"1","Adelie","Torgersen",39.1,18.7,181,3750,"male",2007'),
+        parse_csv_string_to_dict('"2","Adelie","Torgersen",39.5,17.4,186,3800,"female",2007'),
+        parse_csv_string_to_dict('"3","Adelie","Dream",37.8,18.3,174,3400,"female",2007'),
+        parse_csv_string_to_dict('"4","Chinstrap","Dream",46.5,17.9,192,3500,"female",2007'),
+        parse_csv_string_to_dict('"5","Gentoo","Biscoe",46.1,13.2,211,4500,"male",2007')
+    ]
+    result = count_species_by_island(test_data)
+    expected = {
+        "Adelie": {"total": 3, "islands": {"Torgersen": 2, "Dream": 1}},
+        "Chinstrap": {"total": 1, "islands": {"Dream": 1}},
+        "Gentoo": {"total": 1, "islands": {"Biscoe": 1}}
+    }
+    assert result == expected, f"Test 1 failed. Expected {expected}, got {result}"
+    print("✓ Test 1 passed: Multiple species and islands counted correctly")
+    
+    # Test 2: Different distribution (from teammate's test)
+    test_data2 = [
+        parse_csv_string_to_dict('"10","Gentoo","Biscoe",45.2,14.8,215,4550,"male",2008'),
+        parse_csv_string_to_dict('"11","Gentoo","Biscoe",45.0,14.9,210,4600,"female",2008'),
+        parse_csv_string_to_dict('"12","Adelie","Dream",38.1,18.0,180,3400,"female",2008'),
+        parse_csv_string_to_dict('"13","Chinstrap","Dream",46.8,17.5,195,3650,"male",2008')
+    ]
+    result2 = count_species_by_island(test_data2)
+    expected2 = {
+        "Gentoo": {"total": 2, "islands": {"Biscoe": 2}},
+        "Adelie": {"total": 1, "islands": {"Dream": 1}},
+        "Chinstrap": {"total": 1, "islands": {"Dream": 1}}
+    }
+    assert result2 == expected2, f"Test 2 failed. Expected {expected2}, got {result2}"
+    print("✓ Test 2 passed: Different distribution calculated")
+    
+    # Test 3: Empty list (from teammate's test)
+    test_data3 = []
+    result3 = count_species_by_island(test_data3)
+    expected3 = {}
+    assert result3 == expected3, "Empty list should return empty dict"
+    print("✓ Test 3 passed: Empty input handled")
+    
+    # Test 4: Whitespace handling (from teammate's test)
+    test_data4 = [
+        parse_csv_string_to_dict(' "21" ,  "Adelie" ,  "Torgersen" ,39.1,18.7,181,3750,"male",2007'),
+        parse_csv_string_to_dict('"22","Adelie"," Torgersen " ,39.5,17.4,186,3800,"female",2007'),
+        parse_csv_string_to_dict('"23","Adelie" , "Dream",37.8,18.3,174,3400,"female",2007'),
+        parse_csv_string_to_dict('"24","Chinstrap"," Dream " ,46.5,17.9,192,3500,"female",2007'),
+        parse_csv_string_to_dict('"25","Gentoo" , "Biscoe" ,46.1,13.2,211,4500,"male",2007')
+    ]
+    result4 = count_species_by_island(test_data4)
+    expected4 = {
+        "Adelie": {"total": 3, "islands": {"Torgersen": 2, "Dream": 1}},
+        "Chinstrap": {"total": 1, "islands": {"Dream": 1}},
+        "Gentoo": {"total": 1, "islands": {"Biscoe": 1}}
+    }
+    assert result4 == expected4, f"Test 4 failed. Expected {expected4}, got {result4}"
+    print("✓ Test 4 passed: Whitespace handled correctly")
+
+
+# main
+
 def main():
     """Main function to run the penguin data analysis."""
     print("Starting Penguin Data Analysis...")
     print("-" * 40)
     
-    # Run tests first
+    # Run tests
     print("Running tests...")
+    print("=" * 40)
+    
+    # eve tests
     test_load_csv()
     test_count_island_gender()
     test_calculate_ratio()
     test_calculate_body_weights()
+    
+    # alexia tests
+    test_count_total_penguins()
+    test_count_species_by_island()
+    
+    print("\n" + "=" * 40)
+    print("All 24 tests passed! ✓")
+    print("=" * 40)
     
     print("\n" + "=" * 40)
     print("Performing actual analysis...")
@@ -239,21 +377,43 @@ def main():
     
     print(f"Loaded {len(penguins)} penguin records.")
     
-    # Perform analyses
+    # Perform all analyses
+    
+    # Analysis 1: Total count (teammate's function)
+    total_count = count_total_penguins(penguins)
+    print(f"Total penguins: {total_count}")
+    
+    # Analysis 2: Species by island (teammate's function)
+    species_data = count_species_by_island(penguins)
+    print(f"Analyzed {len(species_data)} species across multiple islands.")
+    
+    # Analysis 3: Gender distribution (your function)
     gender_counts = count_island_gender(penguins)
     print(f"Analyzed gender distribution across {len(gender_counts)} islands.")
     
+    # Analysis 4: Gender ratios (your function)
     ratios = calculate_ratio(gender_counts)
     print("Calculated male:female ratios.")
     
+    # Analysis 5: Body weights (your function)
     weight_stats = calculate_body_weights(penguins)
     print(f"Calculated body weight statistics for {len(weight_stats)} species.")
     
-    # Write results to file
-    output_file = 'penguin_analysis_results.txt'
-    write_to_file(gender_counts, weight_stats, ratios, output_file)
-    print(f"\nResults written to '{output_file}'")
-    print("Analysis complete!")
+    # Write results to files
+    
+    # Original output (for backward compatibility with your tests)
+    output_file1 = 'penguin_analysis_results.txt'
+    write_to_file(gender_counts, weight_stats, ratios, output_file1)
+    print(f"\nOriginal results written to '{output_file1}'")
+    
+    # Comprehensive output (combining both teammates' work)
+    output_file2 = 'comprehensive_penguin_analysis.txt'
+    write_comprehensive_results(total_count, species_data, gender_counts, 
+                                 ratios, weight_stats, output_file2)
+    print(f"Comprehensive results written to '{output_file2}'")
+    
+    print("\nAnalysis complete!")
+    print("=" * 40)
 
 
 if __name__ == "__main__":
