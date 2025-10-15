@@ -1,7 +1,29 @@
+# Project 1: Penguin Data Analysis
+# Team Members: Eve Feng, Alexia Zaidi
+# 
+# Function Attribution:
+# - Eve: load_csv, count_island_gender, calculate_ratio, calculate_body_weights
+# - Alexia: count_total_penguins, count_species_by_island
+# - Both: write_comprehensive_results, test cases for our own part of functions
+#
+# AI Tools Used: 
+# Eve: used claude to ask it help load_csv function and write_comprehensive_results function; also use it to come up with edge cases for test cases.
+
+
 import csv
 
+# import data from csv file and data cleaning
+
 def load_csv(penguins_file):
+    """
+    Load penguin data from a CSV file.
     
+    Parameters:
+        penguins_file (str): Path to the CSV file
+    
+    Returns:
+        list: List of dictionaries, each representing a penguin record
+    """
     penguins = []
     
     try:
@@ -9,9 +31,13 @@ def load_csv(penguins_file):
             reader = csv.DictReader(file)
             
             for row in reader:
-                penguin = {}  # Create ONE penguin dict per row
+                penguin = {}
                 
                 for key, value in row.items():
+                    # Skip the index column if it exists
+                    if key == '' or key is None:
+                        continue
+                        
                     if key in ['bill_length_mm', 'bill_depth_mm', 'flipper_length_mm', 'body_mass_g']:
                         if value and value.strip() and value.strip().upper() != 'NA':
                             penguin[key] = float(value)
@@ -28,17 +54,25 @@ def load_csv(penguins_file):
                         else:
                             penguin[key] = ""
                 
-                penguins.append(penguin)  # This line MUST be at same indent as penguin = {}
+                penguins.append(penguin)
     except FileNotFoundError:
         print(f"Error: The file {penguins_file} was not found.")
     
     return penguins
 
-   
 
+# eve's part of analysis functions
 
 def count_island_gender(penguins):
-
+    """
+    Count male and female penguins on each island.
+    
+    Parameters:
+        penguins (list): List of penguin dictionaries
+    
+    Returns:
+        dict: Dictionary with island names as keys and gender counts as values
+    """
     counts = {}
 
     for penguin in penguins:
@@ -54,8 +88,17 @@ def count_island_gender(penguins):
             counts[island]['female']+=1
     return counts
 
-def calculate_ratio(counts):
 
+def calculate_ratio(counts):
+    """
+    Calculate male to female ratio for each island.
+    
+    Parameters:
+        counts (dict): Dictionary of gender counts by island
+    
+    Returns:
+        dict: Dictionary with island names as keys and ratios as values
+    """
     ratios={}
     for island, gender_counts in counts.items():
         male_count = gender_counts.get('male',0)
@@ -72,12 +115,20 @@ def calculate_ratio(counts):
 
     return ratios
 
-def calculate_body_weights(penguins):
 
+def calculate_body_weights(penguins):
+    """
+    Calculate average body weights by species, island, and gender.
+    
+    Parameters:
+        penguins (list): List of penguin dictionaries
+    
+    Returns:
+        dict: Nested dictionary with average weights
+    """
     weights_data = {}
     
     for penguin in penguins:
-
         species = penguin.get('species','')
         island = penguin.get('island','')
         sex = penguin.get('sex','')
@@ -95,7 +146,6 @@ def calculate_body_weights(penguins):
 
         weights_data[species][island][sex].append(body_mass)
 
-
     weights_stats = {}
     
     for species, islands in weights_data.items():
@@ -109,6 +159,36 @@ def calculate_body_weights(penguins):
                 else:
                     weights_stats[species][island][gender] = 'No data'
     return weights_stats
+
+
+# alexia's part of analysis functions
+
+def count_total_penguins(penguins):
+    
+    return len(penguins)
+
+
+def count_species_by_island(penguins):
+
+    species_data = {}
+    
+    for penguin in penguins:
+        species = penguin.get('species', '').strip()
+        island = penguin.get('island', '').strip()
+        
+        if not species or not island:
+            continue
+        
+        if species not in species_data:
+            species_data[species] = {'total': 0, 'islands': {}}
+        
+        species_data[species]['total'] += 1
+        species_data[species]['islands'][island] = species_data[species]['islands'].get(island, 0) + 1
+    
+    return species_data
+
+
+# output functions
 
 def write_to_file(gender_stats, weight_stats, ratios, filename='penguin_analysis_results.txt'):
 
@@ -133,7 +213,7 @@ def write_to_file(gender_stats, weight_stats, ratios, filename='penguin_analysis
             file.write(f"\n{species}:\n")
             for island, genders in sorted(islands.items()):
                 file.write(f"  {island}:\n")
-                for gender in ['male', 'female']:  # Ensure consistent ordering
+                for gender in ['male', 'female']:
                     if gender in genders:
                         weight = genders[gender]
                         if weight != 'No data':
@@ -143,16 +223,66 @@ def write_to_file(gender_stats, weight_stats, ratios, filename='penguin_analysis
         
         file.write("\n" + "=" * 60 + "\n")
         file.write("Analysis complete.\n")
-       
-                       
+
+
+def write_comprehensive_results(total_count, species_data, gender_stats, ratios, 
+                                 weight_stats, filename='comprehensive_penguin_analysis.txt'):
+
+    with open(filename, 'w') as file:
+        file.write('='*70+'\n')
+        file.write('COMPREHENSIVE PENGUIN DATA ANALYSIS\n')
+        file.write('='*70+'\n\n')
         
-
-                
-
-
-    
-
-
-
-    
-    
+        # Section 1: Overall Summary
+        file.write('DATASET OVERVIEW\n')
+        file.write('-'*40+'\n')
+        file.write(f'Total number of penguins: {total_count}\n')
+        file.write(f'Number of species: {len(species_data)}\n')
+        file.write(f'Number of islands: {len(gender_stats)}\n')
+        file.write('\n')
+        
+        # Section 2: Species Distribution
+        file.write('='*70+'\n')
+        file.write('SPECIES DISTRIBUTION BY ISLAND\n')
+        file.write('-'*40+'\n')
+        
+        for i, (species, info) in enumerate(sorted(species_data.items()), 1):
+            file.write(f'\nSpecies {i}: {species}\n')
+            file.write(f'  Total count: {info["total"]}\n')
+            file.write(f'  Island distribution:\n')
+            for island, count in sorted(info['islands'].items()):
+                percentage = (count / info['total']) * 100
+                file.write(f'    - {island}: {count} ({percentage:.1f}%)\n')
+        
+        # Section 3: Gender Distribution
+        file.write('\n' + '='*70+'\n')
+        file.write('GENDER DISTRIBUTION BY ISLAND\n')
+        file.write('-'*40+'\n')
+        for island, counts in sorted(gender_stats.items()):
+            total_island = counts.get('male', 0) + counts.get('female', 0)
+            file.write(f"\nIsland: {island}\n")
+            file.write(f"  Males: {counts.get('male',0)}\n")
+            file.write(f"  Females: {counts.get('female', 0)}\n")
+            file.write(f"  Total: {total_island}\n")
+            file.write(f"  Male:Female Ratio: {ratios.get(island, 'N/A')}\n")
+        
+        # Section 4: Body Weight Analysis
+        file.write("\n" + "=" * 70 + "\n")
+        file.write("AVERAGE BODY WEIGHT (g) BY SPECIES, ISLAND, AND GENDER\n")
+        file.write("-" * 40 + "\n")
+        
+        for species, islands in sorted(weight_stats.items()):
+            file.write(f"\n{species}:\n")
+            for island, genders in sorted(islands.items()):
+                file.write(f"  {island}:\n")
+                for gender in ['male', 'female']:
+                    if gender in genders:
+                        weight = genders[gender]
+                        if weight != 'No data':
+                            file.write(f"    {gender.capitalize()}: {weight} g\n")
+                        else:
+                            file.write(f"    {gender.capitalize()}: {weight}\n")
+        
+        file.write("\n" + "=" * 70 + "\n")
+        file.write("Analysis complete. Data processed successfully!\n")
+        file.write("=" * 70 + "\n")
