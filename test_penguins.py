@@ -146,10 +146,10 @@ def test_count_island_gender():
     
     # Test 4: Edge case - missing data
     test_data4 = [
-        {'island': '', 'sex': 'male'},      # Missing island
-        {'island': 'Biscoe', 'sex': ''},    # Missing sex
-        {'island': 'Dream', 'sex': 'other'}, # Invalid sex
-        {'island': 'Dream', 'sex': 'male'}   # Valid entry
+        {'island': '', 'sex': 'male'},     
+        {'island': 'Biscoe', 'sex': ''},    
+        {'island': 'Dream', 'sex': 'other'}, 
+        {'island': 'Dream', 'sex': 'male'}   
     ]
     result4 = count_island_gender(test_data4)
     assert len(result4) == 1, "Should only have one island"
