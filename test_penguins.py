@@ -2,7 +2,7 @@
 # Team Members: Eve Feng, Alexia Zaidi
 # 
 # Test Function Attribution:
-# - Eve: test_load_csv, test_count_island_gender, test_calculate_ratio, test_calculate_body_weights
+# - Eve: test_load_csv, test_count_island_gender, test_calculate_ratio, test_calculate_body_weights, main
 # - Alexia: test_count_total_penguins, test_count_species_by_island, avg_bill_length
 #
 
@@ -412,9 +412,10 @@ def main():
     # alexia tests
     test_count_total_penguins()
     test_count_species_by_island()
+    test_avg_bill_length()
     
     print("\n" + "=" * 40)
-    print("All 24 tests passed! ✓")
+    print("All 28 tests passed! ✓")
     print("=" * 40)
     
     print("\n" + "=" * 40)
@@ -451,6 +452,10 @@ def main():
     # Analysis 5: Body weights (your function)
     weight_stats = calculate_body_weights(penguins)
     print(f"Calculated body weight statistics for {len(weight_stats)} species.")
+
+     # Analysis 6: Bill length averages
+    bill_length_avgs = avg_bill_length(penguins)
+    print(f"Calculated bill length statistics for {len(bill_length_avgs)} species.")
     
     # Write results to files
     
