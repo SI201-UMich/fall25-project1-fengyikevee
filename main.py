@@ -3,16 +3,16 @@
 # 
 # Function Attribution:
 # - Eve: load_csv, count_island_gender, calculate_ratio, calculate_body_weights, also integrating the codes from eve and alexia (both main.py and test.py)
-# - Alexia: count_total_penguins, count_species_by_island
+# - Alexia: count_total_penguins, count_species_by_island, avg_bill_length
 # - Both: load_csv (the final version integrates our code) write_comprehensive_results, test cases for our own part of functions
 #
 # AI Tools Used: 
-# Eve: used claude to ask it help load_csv function and write_comprehensive_results function; also use it to come up with edge cases for test cases.
-
-
+# Eve: used claude to ask it help load_csv function and write_comprehensive_results function; 
+# also use it to come up with edge cases for test cases.
+# Alexia:Alexia: I used ChatGPT to help me come up with my test cases for the avg_bill function as well as my bill_avg function
 import csv
 
-# import data from csv file and data cleaning
+# import data from csv file and data cleaning (combined version of eve and alexia's code)
 
 def load_csv(penguins_file):
     """
@@ -187,6 +187,35 @@ def count_species_by_island(penguins):
     
     return species_data
 
+def avg_bill_length(penguins):
+    """
+    calculates average bill lnegth
+    """
+    my_dict = {}
+
+    for p in penguins:
+        if 'species' not in p or 'bill_length_mm' not in p:
+            continue
+
+        species = str(p['species']).strip()
+        bill_length = p['bill_length_mm']
+
+        if not species or bill_length is None:
+            continue
+
+        if species in my_dict:
+            my_dict[species].append(float(bill_length))
+        else:
+            my_dict[species] = [float(bill_length)]
+
+    for k in my_dict:
+        values = my_dict[k]
+        if values:
+            my_dict[k] = round(sum(values) / len(values), 2)
+        else:
+            my_dict[k] = "No data"
+
+    return my_dict
 
 # output functions
 
