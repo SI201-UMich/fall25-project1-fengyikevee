@@ -8,7 +8,7 @@
 # IMPORTANT: The main function is under test.py to perform test and analysis in the same time, so after running test.py you will get the analysis results as well as the test results.
 # AI Tools Used: 
 # Eve: used claude to ask it help load_csv function and write_comprehensive_results function; 
-# also use it to come up with edge cases for test cases.
+# also use it to come up with edge cases for test cases and refine the main function's structure
 # Alexia: I used ChatGPT to help me come up with my test cases for the avg_bill function as well as my bill_avg function
 import csv
 
